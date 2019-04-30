@@ -1,4 +1,4 @@
-// Copyright © 2019 Hazem Hemied <hazem.hemied@gmail.com>
+// Copyright © 2019 Hazem Hemied <hemied@fidor.com>
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,28 +16,54 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
+	"path"
 
-	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
-var cfgFile string
+var errorFile = path.Join("/tmp", ".rhelerrors")
+var errorsStore = path.Join("/tmp", ".rhelerrstore")
+var pkgsList = path.Join("/tmp", ".rhelerrpkgs")
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "panicfixer",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Short: "prepare node for patch and fix issues",
+	Long: `Checks installed package for future update for any problems may happen and fix them
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
+This tool is working only on RedHat based OS like [RHEL, CentOS, Fedora]	`,
+}
+
+// Check checks the errors
+func Check(e error) {
+	if e != nil {
+		log.Fatal(e)
+	}
+}
+
+// Contains checks if the string exists in the slice
+func Contains(a []string, x string) bool {
+	for _, n := range a {
+		if x == n {
+			return true
+		}
+	}
+	return false
+}
+
+// DelErrorFile deletes the error file
+func DelErrorFile() {
+	if _, err := os.Stat(errorFile); os.IsNotExist(err) {
+		if err != nil {
+			fmt.Printf("Can't delete %v", errorFile)
+		}
+	}
+	err := os.Remove(errorFile)
+	if err != nil {
+		fmt.Println("Couldn't delete error file, ")
+	}
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -49,41 +75,6 @@ func Execute() {
 	}
 }
 
-func init() {
-	cobra.OnInitialize(initConfig)
+// func init() {
 
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.panicfixer.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-}
-
-// initConfig reads in config file and ENV variables if set.
-func initConfig() {
-	if cfgFile != "" {
-		// Use config file from the flag.
-		viper.SetConfigFile(cfgFile)
-	} else {
-		// Find home directory.
-		home, err := homedir.Dir()
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-
-		// Search config in home directory with name ".panicfixer" (without extension).
-		viper.AddConfigPath(home)
-		viper.SetConfigName(".panicfixer")
-	}
-
-	viper.AutomaticEnv() // read in environment variables that match
-
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
-	}
-}
+// }
