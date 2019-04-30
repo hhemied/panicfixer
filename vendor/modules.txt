@@ -1,0 +1,20 @@
+# github.com/fatih/color v1.7.0
+github.com/fatih/color
+# github.com/inconshreveable/mousetrap v1.0.0
+github.com/inconshreveable/mousetrap
+# github.com/jedib0t/go-pretty v4.0.3+incompatible
+github.com/jedib0t/go-pretty/table
+github.com/jedib0t/go-pretty/text
+# github.com/mattn/go-colorable v0.1.1
+github.com/mattn/go-colorable
+# github.com/mattn/go-isatty v0.0.7
+github.com/mattn/go-isatty
+# github.com/mattn/go-runewidth v0.0.4
+github.com/mattn/go-runewidth
+# github.com/spf13/cobra v0.0.3
+github.com/spf13/cobra
+# github.com/spf13/pflag v1.0.3
+github.com/spf13/pflag
+# golang.org/x/sys v0.0.0-20190429190828-d89cdac9e872
+golang.org/x/sys/unix
+golang.org/x/sys/windows
